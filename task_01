@@ -1,0 +1,38 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+    // Ask user for temperature and original unit
+    float temp;
+    char originalUnit;
+
+    cout << "Enter temperature value: ";
+    cin >> temp;
+
+    cout << "Enter original unit of measurement (C, F, or K): ";
+    cin >> originalUnit;
+
+    // Variables for converted temperatures
+    float newTemp1, newTemp2;
+
+    // Perform conversion based on original unit
+    if (originalUnit == 'C') {
+        newTemp1 = (9.0 / 5.0) * temp + 32.0;
+        newTemp2 = temp + 273.15;
+    } else if (originalUnit == 'F') {
+        newTemp1 = (5.0 / 9.0) * (temp - 32.0);
+        newTemp2 = (5.0 / 9.0) * (temp - 32.0) + 273.15;
+    } else if (originalUnit == 'K') {
+        newTemp1 = temp - 273.15;
+        newTemp2 = (9.0 / 5.0) * (temp - 273.15) + 32.0;
+    } else {
+        cout << "Invalid unit of measurement." << endl;
+        return 1;
+    }
+
+    // Display converted temperatures
+    cout << "Temperature in Fahrenheit: " << newTemp1 << endl;
+    cout << "Temperature in Kelvin: " << newTemp2 << endl;
+
+    return 0;
+}
