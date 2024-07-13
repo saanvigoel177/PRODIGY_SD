@@ -1,0 +1,55 @@
+#include <iostream>
+#include <random>
+#include <ctime>
+using namespace std;
+
+// Function to generate a random number within a specified range
+int generateRandomNumber(int minVal, int maxVal) 
+{
+    random_device rd;
+    mt19937 mt(rd());
+    uniform_int_distribution<int> dist(minVal, maxVal);
+    return dist(mt);
+}
+
+// Function to play the number guessing game
+void playNumberGuessingGame(int randomNumber)
+{
+    int userGuess;
+
+    do {
+        cout << "Take a guess: ";
+        cin >> userGuess;
+        
+        if (userGuess < randomNumber)
+            cout << "Too low! Try a higher number." << endl;
+        else if (userGuess > randomNumber)
+            cout << "Too high! Try a lower number." << endl;
+        else
+            cout << "Congratulations! You guessed it right: " << randomNumber << endl;
+        
+        cout << endl;
+    } while (userGuess != randomNumber);
+}
+
+int main() 
+{
+    srand(static_cast<unsigned int>(time(nullptr))); // Seed the random number generator
+
+    int minValue, maxValue;
+    
+    cout << "Enter the minimum value for the range: ";
+    cin >> minValue;
+    
+    cout << "Enter the maximum value for the range: ";
+    cin >> maxValue;
+    
+    cout << endl;
+
+    int secretNumber = generateRandomNumber(minValue, maxValue);
+
+    cout << "I'm thinking of a number between " << minValue << " and " << maxValue << ". Can you guess it?" << endl;
+    playNumberGuessingGame(secretNumber);
+
+    return 0;
+}
