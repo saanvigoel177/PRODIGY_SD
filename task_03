@@ -1,0 +1,98 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// Define a structure to hold contact information
+struct Contact {
+    string name;
+    string phoneNumber;
+    string email;
+};
+
+int main() {
+    vector<Contact> contacts; // Vector to store contacts
+    string filename = "contacts.txt"; // File name to save/load contacts
+
+    // Load contacts from file if it exists
+    ifstream inFile(filename);
+    if (inFile.is_open()) {
+        string line;
+        while (getline(inFile, line)) {
+            Contact contact;
+            size_t pos1 = line.find(",");
+            size_t pos2 = line.find(",", pos1 + 1);
+            if (pos1 != string::npos && pos2 != string::npos) {
+                contact.name = line.substr(0, pos1);
+                contact.phoneNumber = line.substr(pos1 + 1, pos2 - pos1 - 1);
+                contact.email = line.substr(pos2 + 1);
+                contacts.push_back(contact);
+            }
+        }
+        inFile.close();
+        cout << "Contacts loaded from file." << endl;
+    } else {
+        cout << "No contacts file found. Starting with an empty contact list." << endl;
+    }
+
+    // Main menu loop
+    while (true) {
+        cout << "Contact Management System" << endl;
+        cout << "1. Add Contact" << endl;
+        cout << "2. Display Contacts" << endl;
+        cout << "3. Save and Exit" << endl;
+        cout << "Enter your choice: ";
+        
+        int choice;
+        cin >> choice;
+        cin.ignore(); // Clear input buffer
+
+        switch (choice) {
+            case 1: {
+                Contact newContact;
+                cout << "Enter contact details:" << endl;
+                cout << "Name: ";
+                getline(cin, newContact.name);
+                cout << "Phone Number: ";
+                getline(cin, newContact.phoneNumber);
+                cout << "Email: ";
+                getline(cin, newContact.email);
+                contacts.push_back(newContact);
+                cout << "Contact added successfully." << endl;
+                break;
+            }
+            case 2:
+                if (contacts.empty()) {
+                    cout << "No contacts to display." << endl;
+                } else {
+                    cout << "Contact List:" << endl;
+                    for (const auto& contact : contacts) {
+                        cout << "Name: " << contact.name << endl;
+                        cout << "Phone Number: " << contact.phoneNumber << endl;
+                        cout << "Email: " << contact.email << endl;
+                        cout << "-------------------------" << endl;
+                    }
+                }
+                break;
+            case 3: {
+                ofstream outFile(filename);
+                if (!outFile.is_open()) {
+                    cout << "Error: Unable to open the file for writing." << endl;
+                } else {
+                    for (const auto& contact : contacts) {
+                        outFile << contact.name << "," << contact.phoneNumber << "," << contact.email << endl;
+                    }
+                    outFile.close();
+                    cout << "Contacts saved to file." << endl;
+                }
+                cout << "Goodbye!" << endl;
+                return 0;
+            }
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+    }
+
+    return 0;
+}
